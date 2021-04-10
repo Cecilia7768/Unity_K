@@ -1,0 +1,12 @@
+
+=== Sat Apr 10 10:39:52 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.2d.sprite@1.0.0
+  com.unity.2d.tilemap@1.0.0
+The following packages were updated:
+  com.unity.test-framework from version 1.1.22 to 1.1.24
+  com.unity.textmeshpro from version 2.1.1 to 2.1.4

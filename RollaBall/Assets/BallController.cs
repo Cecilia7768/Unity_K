@@ -20,7 +20,7 @@ public class BallController : MonoBehaviour
     }
     private void Awake()
     {
-        timelimit = 30f;
+        timelimit = 10f;
     }
     void Update()
     {
