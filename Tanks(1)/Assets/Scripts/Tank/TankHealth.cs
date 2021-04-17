@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+//다른 클래스에도 쓸수있는 전역변수 필요함!
 public class TankHealth : MonoBehaviour
 {
     public float m_StartingHealth = 100f;
@@ -12,10 +13,24 @@ public class TankHealth : MonoBehaviour
 
     private AudioSource m_ExplosionAudio;
     private ParticleSystem m_ExplosionParticles;
-    private float m_CurrentHealth;
+    public float m_CurrentHealth;
     private bool m_Dead;
+    //////////////////////////
+    public static bool m_eattenCoin; //코인 먹으면 다른 챕터에서 활성화 여부 사용
+    public float m_lifeCoin = 1;
+    public float m_addLife = 20f;    
 
-
+    private void OnTriggerEnter(Collider collider) //낸주 코드 정리 필요!!
+    {
+        //충돌여부 담을 변수필요
+        if (collider.gameObject.CompareTag("Coin")) 
+        {            
+            collider.gameObject.SetActive(false);
+            m_eattenCoin = true;
+            Effectsometing();
+        }       
+        SetHealthUI();
+    }
     private void Awake()
     {
         m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
@@ -23,7 +38,6 @@ public class TankHealth : MonoBehaviour
 
         m_ExplosionParticles.gameObject.SetActive(false);
     }
-
 
     private void OnEnable()
     {
@@ -33,6 +47,40 @@ public class TankHealth : MonoBehaviour
         SetHealthUI();
     }
 
+    private void Effectsometing()
+    {
+        int randomEffect;
+        //float timer = 3f;
+
+        CoinController coin = GetComponent<CoinController>();
+        ShellExplosion sell = GetComponent<ShellExplosion>();
+        TankMovement tankMovement = GetComponent<TankMovement>();
+
+        randomEffect = Random.Range(0, 3);
+    
+        if (randomEffect == 0)
+        {
+            if (m_CurrentHealth + m_addLife <= 100)
+                m_CurrentHealth += m_addLife;
+            else
+                m_CurrentHealth = m_StartingHealth;
+        }
+        else if (randomEffect == 1)
+            sell.m_MaxDamage = sell.m_MaxDamage * 2; //데미지가 두배!
+        else if (randomEffect == 2)
+        {
+            //코루틴사용 / while 안됨
+            //if (timer == 3 && timer > 0)
+            //    timer -= Time.deltaTime;               
+            //else
+            tankMovement.m_Speed *= 2; //스피드 두배
+        }
+        else
+        { //연사?? 뭐하지
+            //tankshooting script->Fire() 함수 체크
+
+        }
+    }
 
     public void TakeDamage(float amount)
     {
@@ -40,7 +88,8 @@ public class TankHealth : MonoBehaviour
         m_CurrentHealth -= amount;
 
         SetHealthUI();
-
+      
+       
         if (m_CurrentHealth <= 0f && !m_Dead)
         {
             OnDeath();
@@ -69,4 +118,6 @@ public class TankHealth : MonoBehaviour
 
         gameObject.SetActive(false);
     }
+
 }
+

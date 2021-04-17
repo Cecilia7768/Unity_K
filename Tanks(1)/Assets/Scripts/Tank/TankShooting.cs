@@ -9,12 +9,12 @@ public class TankShooting : MonoBehaviour
     public Slider m_AimSlider;           
     public AudioSource m_ShootingAudio;  
     public AudioClip m_ChargingClip;     
-    public AudioClip m_FireClip;         
+    public AudioClip m_FireClip;
+    public TankHealth tankHealth; //static
     public float m_MinLaunchForce = 15f; 
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
-
-
+    
     private string m_FireButton;         
     private float m_CurrentLaunchForce;  
     private float m_ChargeSpeed;         
@@ -64,11 +64,13 @@ public class TankShooting : MonoBehaviour
 
     private void Fire()
     {
+        //static 변수 가져오기
         m_Fired = true;
         Rigidbody shellInstance = Instantiate(m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play();
-        m_CurrentLaunchForce = m_MinLaunchForce;
+        m_CurrentLaunchForce = m_MinLaunchForce;    
+        
     }
 }

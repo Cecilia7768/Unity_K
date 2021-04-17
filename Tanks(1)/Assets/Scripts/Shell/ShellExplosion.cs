@@ -9,7 +9,7 @@ public class ShellExplosion : MonoBehaviour
 	public float m_ExplosionForce = 1000f;
 	public float m_MaxLifeTime = 2f;
 	public float m_ExplosionRadius = 5f;
-
+	//미사일 데미지,발사속도 등등
 
 	private void Start()
 	{
@@ -39,7 +39,8 @@ public class ShellExplosion : MonoBehaviour
 			{
 				continue;
 			}
-
+			
+		
 			float damage = CalculateDamage(targetRigidBody.position);
 
 			targetHealth.TakeDamage(damage);
