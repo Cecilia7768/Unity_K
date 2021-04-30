@@ -11,7 +11,6 @@ public class TankShooting : MonoBehaviour
     public AudioSource m_ShootingAudio;
     public AudioClip m_ChargingClip;
     public AudioClip m_FireClip;
-    //  public TankHealth tankHealth; //static
     public float m_MinLaunchForce = 15f;
     public float m_MaxLaunchForce = 30f;
     public float m_MaxChargeTime = 0.75f;
@@ -24,8 +23,6 @@ public class TankShooting : MonoBehaviour
     public bool m_bCheckMeetCoin;
     public int m_bEatenPowerCoin;
 
-
-
     private void OnEnable()
     {        
         m_CurrentLaunchForce = m_MinLaunchForce;
@@ -35,7 +32,8 @@ public class TankShooting : MonoBehaviour
 
 
     private void Start()
-    {      
+    {
+        m_bEatenPowerCoin = 0;
         m_FireButton = "Fire" + m_PlayerNumber;
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
     }
@@ -43,13 +41,7 @@ public class TankShooting : MonoBehaviour
 
     private void Update()
     {
-        TankHealth tankHealth = GetComponent<TankHealth>();
-        if (tankHealth.m_PowerUpCoin == true)
-        {
-            m_bEatenPowerCoin = 2; //업데이트 말고 다른?트리거에서 체크
-            //tankHealth.m_PowerUpCoin = false;
-        }
-
+    
         m_AimSlider.value = m_MinLaunchForce;
         if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
         {

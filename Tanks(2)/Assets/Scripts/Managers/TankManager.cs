@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+
 [Serializable]
 public class TankManager
 {
@@ -57,6 +58,8 @@ public class TankManager
 
     public void Reset()
     {
+        m_Movement.m_AddSpeed = 0;
+
         m_Instance.transform.position = m_SpawnPoint.position;
         m_Instance.transform.rotation = m_SpawnPoint.rotation;
 

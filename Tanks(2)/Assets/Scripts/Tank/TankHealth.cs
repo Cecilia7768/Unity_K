@@ -17,10 +17,9 @@ public class TankHealth : MonoBehaviour
     private bool m_Dead;
     //////////////////////////    
     public float m_addLife = 20f;
-    public bool m_PowerUpCoin;
     public bool m_SpeedCoin;
-
-    //스테이지 새로시작시 코인,파워 초기화
+    public bool m_Check_Dead;
+    public bool m_Check_Coin_Eatten;
 
     private void Awake()
     {
@@ -31,43 +30,50 @@ public class TankHealth : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider collider)
-    {
+    {     
         int randomEffect;
         randomEffect = Random.Range(0, 3);
         if (collider.gameObject.CompareTag("Coin"))
         {
             collider.gameObject.SetActive(false);
-            StartCoroutine(WhenMeetCoin(1));
+            if (randomEffect == 0)
+                StartCoroutine(WhenMeetCoin_Health());
+            else if (randomEffect == 1) 
+            {
+                StartCoroutine(WhenMeetCoin_About_Power());     //이렇게 하는게 맞나??
+            }
+            else
+                StartCoroutine(WhenMeetCoin_Speed());
+            m_Check_Coin_Eatten = true;
         }
         SetHealthUI();
     }
-
-    IEnumerator WhenMeetCoin(int randomEffect)
+    IEnumerator WhenMeetCoin_Health()
     {
-
-        if (randomEffect == 0)
-        {
-            if (m_CurrentHealth + m_addLife <= 100)
-                m_CurrentHealth += m_addLife;
-            else
-                m_CurrentHealth = m_StartingHealth;
-            yield break;
-        }
-        else if (randomEffect == 1)
-        {               
-            m_PowerUpCoin = true;
-            yield return new WaitForSeconds(4f);
-            m_PowerUpCoin = false;
-
-        }
-        else if (randomEffect == 2)     
-        {
-            m_SpeedCoin = true;
-            yield break;
-        }
-
+        if (m_CurrentHealth + m_addLife <= 100)
+            m_CurrentHealth += m_addLife;
+        else
+            m_CurrentHealth = m_StartingHealth;
+        yield break;
     }
-
+    IEnumerator WhenMeetCoin_About_Power()
+    {
+        TankShooting tankShooting = GetComponent<TankShooting>();
+        tankShooting.m_bEatenPowerCoin += 2;
+        yield return new WaitForSeconds(4f);
+        tankShooting.m_bEatenPowerCoin = 0;
+    }
+    //IEnumerator WhenMeetCoin_About_Power_2()
+    //{
+    //    TankShooting tankShooting = GetComponent<TankShooting>();
+    //    yield return new WaitForSeconds(4f);
+    //    tankShooting.m_bEatenPowerCoin = 0;
+    //}
+    IEnumerator WhenMeetCoin_Speed()
+    {
+        m_SpeedCoin = true;
+        yield break;
+    }
     private void OnEnable()
     {
         m_CurrentHealth = m_StartingHealth;
@@ -75,7 +81,6 @@ public class TankHealth : MonoBehaviour
 
         SetHealthUI();
     }
-
 
     public void TakeDamage(float amount)
     {
@@ -89,7 +94,6 @@ public class TankHealth : MonoBehaviour
         }
     }
 
-
     private void SetHealthUI()
     {
         // Adjust the value and colour of the slider.
@@ -97,13 +101,10 @@ public class TankHealth : MonoBehaviour
 
         m_FillImage.color = Color.Lerp(m_ZeroHealthColor, m_FullHealthColor, m_CurrentHealth / m_StartingHealth);
     }
-
-
-    private void OnDeath()
-    {
+        private void OnDeath()
+    {      
         // Play the effects for the death of the tank and deactivate it.
         m_Dead = true;
-
         m_ExplosionParticles.transform.position = transform.position;
         m_ExplosionParticles.gameObject.SetActive(true);
         m_ExplosionParticles.Play();

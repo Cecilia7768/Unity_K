@@ -17,7 +17,7 @@ public class TankMovement : MonoBehaviour
     private float m_TurnInputValue;        
     private float m_OriginalPitch;
     ///////////////////////////////////////////
-    private float m_AddSpeed;
+    public float m_AddSpeed;
 
     private void Awake()
     {
