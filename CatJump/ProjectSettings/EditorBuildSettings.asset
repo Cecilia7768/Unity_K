@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CatJump.unity
+    guid: f7cfff92094b2184eb4251b55c7fb385
+  - enabled: 1
+    path: Assets/Scenes/ClearScene.unity
+    guid: 94d5603a16523014386c4e0c4dc5dfca
   m_configObjects: {}
